@@ -1,5 +1,0 @@
-// Admin
-password1234
-
-// Student1
-user1234
