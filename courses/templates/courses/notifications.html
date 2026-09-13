@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Notifications
+{% endblock %}
+
+
+{% block content %}
+
+<div class="card">
+
+    <h1>Notifications</h1>
+
+    <p>
+        Recent activity related to your courses.
+    </p>
+
+</div>
+
+
+<ul class="notification-list">
+
+    {% for notification in notifications %}
+
+        <li>
+
+            <p>
+                {{ notification.message }}
+            </p>
+
+            <p class="muted">
+                {{ notification.created_at }}
+            </p>
+
+            {% if not notification.is_read %}
+
+                <a
+                    class="button"
+                    href="{% url 'mark_notification_read' notification.id %}"
+                >
+                    Mark as Read
+                </a>
+
+            {% else %}
+
+                <span class="muted">
+                    Read
+                </span>
+
+            {% endif %}
+
+        </li>
+
+    {% empty %}
+
+        <li>
+            You have no notifications.
+        </li>
+
+    {% endfor %}
+
+</ul>
+
+{% endblock %}

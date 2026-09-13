@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Add Course Material
+{% endblock %}
+
+
+{% block content %}
+
+<div class="card">
+
+    <h1>Add Course Material</h1>
+
+    <p>
+        Course:
+        <strong>{{ course.title }}</strong>
+    </p>
+
+    <form
+        method="post"
+        enctype="multipart/form-data"
+    >
+
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit">
+            Upload Material
+        </button>
+
+        <a
+            class="button secondary-button"
+            href="{% url 'course_detail' course.id %}"
+        >
+            Cancel
+        </a>
+
+    </form>
+
+</div>
+
+{% endblock %}

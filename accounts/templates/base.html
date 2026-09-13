@@ -1,0 +1,109 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {% block title %}
+            eLearning
+        {% endblock %}
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/style.css' %}"
+    >
+</head>
+
+<body>
+
+    <nav>
+
+        <div class="nav-container">
+
+            <a
+                class="nav-brand"
+                href="{% url 'home' %}"
+            >
+                eLearning
+            </a>
+
+            {% if user.is_authenticated %}
+
+                <a href="{% url 'courses_list' %}">
+                    Courses
+                </a>
+
+                {% if user.role == 'TEACHER' %}
+
+                    <a href="{% url 'my_courses' %}">
+                        My Courses
+                    </a>
+
+                    <a href="{% url 'search' %}">
+                        Search Users
+                    </a>
+
+                {% else %}
+
+                    <a href="{% url 'my_enrolments' %}">
+                        My Enrolments
+                    </a>
+
+                {% endif %}
+
+                <a href="{% url 'notifications' %}">
+                    Notifications
+                </a>
+
+                <a href="{% url 'profile' user.id %}">
+                    Profile
+                </a>
+
+                <form
+                    method="post"
+                    action="{% url 'logout' %}"
+                    class="nav-form"
+                >
+                    {% csrf_token %}
+
+                    <button
+                        type="submit"
+                        class="nav-button"
+                    >
+                        Logout
+                    </button>
+                </form>
+
+            {% else %}
+
+                <a href="{% url 'login' %}">
+                    Login
+                </a>
+
+                <a href="{% url 'register' %}">
+                    Register
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </nav>
+
+    <main class="container">
+
+        {% block content %}
+        {% endblock %}
+
+    </main>
+
+</body>
+</html>

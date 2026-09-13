@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ course.title }}
+{% endblock %}
+
+
+{% block content %}
+
+<div class="card">
+
+    <h1>
+        {{ course.title }}
+    </h1>
+
+    <p>
+        {{ course.description }}
+    </p>
+
+    <div class="details-grid">
+
+        <div class="detail-box">
+
+            <strong>Teacher</strong>
+
+            <p>
+                {{ course.teacher.username }}
+            </p>
+
+        </div>
+
+        <div class="detail-box">
+
+            <strong>Created</strong>
+
+            <p>
+                {{ course.created_at }}
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="actions">
+
+        {% if user == course.teacher %}
+
+            <a
+                class="button"
+                href="{% url 'add_material' course.id %}"
+            >
+                Add Material
+            </a>
+
+            <a
+                class="button secondary-button"
+                href="{% url 'course_students' course.id %}"
+            >
+                View Students
+            </a>
+
+            <a
+                class="button"
+                href="{% url 'chat_room' course.id %}"
+            >
+                Course Chat
+            </a>
+
+        {% elif user.role == 'STUDENT' %}
+
+            {% if is_enrolled %}
+
+                <span class="success-message">
+                    You are enrolled on this course.
+                </span>
+
+                <a
+                    class="button"
+                    href="{% url 'leave_feedback' course.id %}"
+                >
+                    Leave Feedback
+                </a>
+
+                <a
+                    class="button"
+                    href="{% url 'chat_room' course.id %}"
+                >
+                    Course Chat
+                </a>
+
+            {% else %}
+
+                <form
+                    method="post"
+                    action="{% url 'enrol_course' course.id %}"
+                >
+
+                    {% csrf_token %}
+
+                    <button type="submit">
+                        Enrol on Course
+                    </button>
+
+                </form>
+
+            {% endif %}
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+<div class="card">
+
+    <h2>Course Materials</h2>
+
+    {% for material in materials %}
+
+        <div class="detail-box">
+
+            <strong>
+                {{ material.title }}
+            </strong>
+
+            <p class="muted">
+                Uploaded:
+                {{ material.uploaded_at }}
+            </p>
+
+            <a
+                class="button"
+                href="{{ material.file.url }}"
+                target="_blank"
+            >
+                Open Material
+            </a>
+
+        </div>
+
+        <br>
+
+    {% empty %}
+
+        <p>
+            No materials have been uploaded yet.
+        </p>
+
+    {% endfor %}
+
+</div>
+
+
+<div class="card">
+
+    <h2>Student Feedback</h2>
+
+    {% for item in feedback %}
+
+        <div class="detail-box">
+
+            <strong>
+                {{ item.student.username }}
+            </strong>
+
+            <p>
+                Rating:
+                {{ item.rating }}/5
+            </p>
+
+            <p>
+                {{ item.comment }}
+            </p>
+
+            <p class="muted">
+                {{ item.created_at }}
+            </p>
+
+        </div>
+
+        <br>
+
+    {% empty %}
+
+        <p>
+            No feedback has been submitted yet.
+        </p>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

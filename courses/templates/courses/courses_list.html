@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Courses
+{% endblock %}
+
+
+{% block content %}
+
+<div class="card">
+
+    <h1>Available Courses</h1>
+
+    <p>
+        Browse the courses currently available on the platform.
+    </p>
+
+</div>
+
+
+<ul class="course-list">
+
+    {% for course in courses %}
+
+        <li>
+
+            <h3>
+                {{ course.title }}
+            </h3>
+
+            <p>
+                {{ course.description|truncatewords:30 }}
+            </p>
+
+            <p class="muted">
+                Teacher:
+                {{ course.teacher.username }}
+            </p>
+
+            <a
+                class="button"
+                href="{% url 'course_detail' course.id %}"
+            >
+                View Course
+            </a>
+
+        </li>
+
+    {% empty %}
+
+        <li>
+            No courses are currently available.
+        </li>
+
+    {% endfor %}
+
+</ul>
+
+{% endblock %}

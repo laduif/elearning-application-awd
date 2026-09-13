@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}
+My Courses
+{% endblock %}
+
+
+{% block content %}
+
+<div class="card">
+
+    <h1>My Courses</h1>
+
+    <p>
+        Courses that you currently teach.
+    </p>
+
+    <a
+        class="button"
+        href="{% url 'create_course' %}"
+    >
+        Create Course
+    </a>
+
+</div>
+
+
+<ul class="course-list">
+
+    {% for course in courses %}
+
+        <li>
+
+            <h3>
+                {{ course.title }}
+            </h3>
+
+            <p>
+                {{ course.description|truncatewords:30 }}
+            </p>
+
+            <div class="actions">
+
+                <a
+                    class="button"
+                    href="{% url 'course_detail' course.id %}"
+                >
+                    View Course
+                </a>
+
+                <a
+                    class="button secondary-button"
+                    href="{% url 'course_students' course.id %}"
+                >
+                    View Students
+                </a>
+
+            </div>
+
+        </li>
+
+    {% empty %}
+
+        <li>
+            You have not created any courses yet.
+        </li>
+
+    {% endfor %}
+
+</ul>
+
+{% endblock %}

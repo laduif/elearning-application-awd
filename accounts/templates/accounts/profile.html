@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ profile_user.username }} - Profile
+{% endblock %}
+
+
+{% block content %}
+
+<div class="card">
+
+    {% if profile_user.profile_picture %}
+
+        <img
+            src="{{ profile_user.profile_picture.url }}"
+            alt="Profile picture"
+            class="profile-picture"
+        >
+
+    {% endif %}
+
+    <h1>{{ profile_user.username }}</h1>
+
+    <p>
+        <strong>Name:</strong>
+
+        {% if profile_user.first_name or profile_user.last_name %}
+            {{ profile_user.first_name }}
+            {{ profile_user.last_name }}
+        {% else %}
+            Not provided
+        {% endif %}
+    </p>
+
+    <p>
+        <strong>Role:</strong>
+        {{ profile_user.get_role_display }}
+    </p>
+
+    <p>
+        <strong>Bio:</strong>
+
+        {% if profile_user.bio %}
+            {{ profile_user.bio }}
+        {% else %}
+            No bio provided.
+        {% endif %}
+    </p>
+
+
+    {% if profile_user == user %}
+
+        <a
+            class="button"
+            href="{% url 'edit_profile' %}"
+        >
+            Edit Profile
+        </a>
+
+    {% endif %}
+
+</div>
+
+
+{% if profile_user == user and user.role == 'STUDENT' %}
+
+    <div class="card">
+
+        <h2>Post Status Update</h2>
+
+        <form method="post">
+
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button type="submit">
+                Post Status
+            </button>
+
+        </form>
+
+    </div>
+
+{% endif %}
+
+
+<div class="card">
+
+    <h2>Status Updates</h2>
+
+    {% for status in status_updates %}
+
+        <p>
+            {{ status.content }}
+        </p>
+
+        <p class="muted">
+            {{ status.created_at }}
+        </p>
+
+        <hr>
+
+    {% empty %}
+
+        <p>No status updates yet.</p>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

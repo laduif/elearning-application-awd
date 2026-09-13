@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Home
+{% endblock %}
+
+
+{% block content %}
+
+<div class="card">
+
+    {% if user.is_authenticated %}
+
+        <h1>
+            Welcome, {{ user.first_name|default:user.username }}
+        </h1>
+
+        <p>
+            <strong>Username:</strong>
+            {{ user.username }}
+        </p>
+
+        <p>
+            <strong>Role:</strong>
+            {{ user.get_role_display }}
+        </p>
+
+        <p>
+            <a
+                class="button"
+                href="{% url 'profile' user.id %}"
+            >
+                View Profile
+            </a>
+        </p>
+
+    {% else %}
+
+        <h1>eLearning Application</h1>
+
+        <p>
+            Please log in or create an account.
+        </p>
+
+    {% endif %}
+
+</div>
+
+
+{% if user.is_authenticated %}
+
+    <div class="card">
+
+        <h2>Courses</h2>
+
+        {% if user.role == 'TEACHER' %}
+
+            <p>
+                Manage the courses that you teach.
+            </p>
+
+            <a
+                class="button"
+                href="{% url 'my_courses' %}"
+            >
+                My Courses
+            </a>
+
+            <a
+                class="button"
+                href="{% url 'create_course' %}"
+            >
+                Create Course
+            </a>
+
+        {% else %}
+
+            <p>
+                View your current enrolments or discover new courses.
+            </p>
+
+            <a
+                class="button"
+                href="{% url 'my_enrolments' %}"
+            >
+                My Enrolments
+            </a>
+
+            <a
+                class="button"
+                href="{% url 'courses_list' %}"
+            >
+                Browse Courses
+            </a>
+
+        {% endif %}
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>Notifications</h2>
+
+        <p>
+            Check for course activity and updates.
+        </p>
+
+        <a
+            class="button"
+            href="{% url 'notifications' %}"
+        >
+            View Notifications
+        </a>
+
+    </div>
+
+
+    {% if user.role == 'TEACHER' %}
+
+        <div class="card">
+
+            <h2>User Search</h2>
+
+            <p>
+                Search for students and other teachers.
+            </p>
+
+            <a
+                class="button"
+                href="{% url 'search' %}"
+            >
+                Search Users
+            </a>
+
+        </div>
+
+    {% endif %}
+
+{% endif %}
+
+{% endblock %}

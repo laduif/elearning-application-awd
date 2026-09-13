@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Course Students
+{% endblock %}
+
+
+{% block content %}
+
+<div class="card">
+
+    <h1>
+        Students - {{ course.title }}
+    </h1>
+
+    <p>
+        Students currently enrolled on this course.
+    </p>
+
+</div>
+
+
+<ul class="user-list">
+
+    {% for enrolment in enrolments %}
+
+        <li>
+
+            <h3>
+                {{ enrolment.student.username }}
+            </h3>
+
+            <p>
+                {{ enrolment.student.first_name }}
+                {{ enrolment.student.last_name }}
+            </p>
+
+            <p class="muted">
+                Enrolled:
+                {{ enrolment.enrolled_at }}
+            </p>
+
+            <a
+                class="button"
+                href="{% url 'profile' enrolment.student.id %}"
+            >
+                View Profile
+            </a>
+
+            <a
+                class="button secondary-button"
+                href="{% url 'remove_student' course.id enrolment.student.id %}"
+            >
+                Remove Student
+            </a>
+
+            <a
+                class="button danger-button"
+                href="{% url 'block_student' course.id enrolment.student.id %}"
+            >
+                Block Student
+            </a>
+
+        </li>
+
+    {% empty %}
+
+        <li>
+            No students are currently enrolled.
+        </li>
+
+    {% endfor %}
+
+</ul>
+
+{% endblock %}
