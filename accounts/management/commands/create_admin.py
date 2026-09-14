@@ -15,15 +15,11 @@ class Command(BaseCommand):
         password = os.environ.get('ADMIN_PASSWORD')
 
         if not username or not password:
-            self.stdout.write(
-                'Admin environment variables not set.'
-            )
+            self.stdout.write('Admin environment variables not set.')
             return
 
         if User.objects.filter(username=username).exists():
-            self.stdout.write(
-                'Admin account already exists.'
-            )
+            self.stdout.write('Admin account already exists.')
             return
 
         User.objects.create_superuser(
@@ -32,8 +28,4 @@ class Command(BaseCommand):
             password=password
         )
 
-        self.stdout.write(
-            self.style.SUCCESS(
-                'Admin account created successfully.'
-            )
-        )
+        self.stdout.write(self.style.SUCCESS('Admin account created successfully.'))
